@@ -1,0 +1,33 @@
+class Plotter::Parser
+
+rule
+  document
+    : document_part_list { result = Node::Document.new(parts: Array(val[0])) }
+
+  document_part_list
+    : document_part_list document_part { result = Array(val[0]) + Array(val[1]) }
+    | document_part
+
+  document_part
+    : action_type name left_bracket selection_list right_bracket { result = Node::OperationDefinition.new(operation_type: val[0], name: val[1], selections: Array(val[3])) }
+
+  action_type
+    : QUERY
+    | MUTATION
+
+  selection_list
+    : selection comma selection_list { result = Array(val[0]) + Array(val[2]) }
+    | selection
+
+  selection
+    : name left_bracket selection_list right_bracket { result = Node::Field.new(name: val[0], selections: val[2]) }
+    | name { result = Node::Field.new(name: val[0]) }
+
+---- header ----
+require File.dirname(__FILE__) + '/parser.rex.rb'
+
+---- inner ----
+
+def self.parse(sql)
+  new.scan_str(sql)
+end
