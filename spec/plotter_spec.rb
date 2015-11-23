@@ -15,7 +15,10 @@ class PlotterSpec < Minitest::Spec
         query myQueryName {
           user {
             id,
-            name
+            name,
+            associated_user {
+              id
+            }
           }
         }
       GRAPHQL
@@ -32,6 +35,12 @@ class PlotterSpec < Minitest::Spec
                 selections: [
                   Plotter::Node::Field.new(name: 'id'),
                   Plotter::Node::Field.new(name: 'name'),
+                  Plotter::Node::Field.new(
+                    name: 'associated_user',
+                    selections: [
+                      Plotter::Node::Field.new(name: 'id')
+                    ]
+                  )
                 ]
               )
             ]

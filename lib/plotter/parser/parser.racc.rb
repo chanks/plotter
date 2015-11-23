@@ -11,7 +11,7 @@ require File.dirname(__FILE__) + '/parser.rex.rb'
 module Plotter
   class Parser < Racc::Parser
 
-module_eval(<<'...end parser.racc/module_eval...', 'parser.racc', 30)
+module_eval(<<'...end parser.racc/module_eval...', 'parser.racc', 31)
 
 def self.parse(sql)
   new.scan_str(sql)
@@ -20,31 +20,31 @@ end
 ##### State transition tables begin ###
 
 racc_action_table = [
-     5,     6,     5,     6,     7,     9,    10,    11,    14,    15,
-    16,    17,    14,    14,    20 ]
+    14,     5,     6,     5,     6,    16,     7,     9,    10,    11,
+    14,    15,    18,    14,    14,    21 ]
 
 racc_action_check = [
-     0,     0,     2,     2,     1,     4,     7,     9,    11,    12,
-    13,    14,    16,    17,    19 ]
+    13,     0,     0,     2,     2,    13,     1,     4,     7,     9,
+    11,    12,    14,    16,    18,    20 ]
 
 racc_action_pointer = [
-    -5,     4,    -3,   nil,     3,   nil,   nil,     6,   nil,     4,
-   nil,     6,     5,     3,     8,   nil,    10,    11,   nil,    10,
-   nil ]
+    -4,     6,    -2,   nil,     5,   nil,   nil,     8,   nil,     6,
+   nil,     8,     7,    -2,     9,   nil,    11,   nil,    12,   nil,
+    11,   nil ]
 
 racc_action_default = [
-   -11,   -11,    -1,    -3,   -11,    -5,    -6,   -11,    -2,   -11,
-    21,   -11,   -11,    -8,   -10,    -4,   -11,   -11,    -7,   -11,
-    -9 ]
+   -12,   -12,    -1,    -3,   -12,    -5,    -6,   -12,    -2,   -12,
+    22,   -12,   -12,    -9,   -11,    -4,   -12,    -8,   -12,    -7,
+   -12,   -10 ]
 
 racc_goto_table = [
-    12,     3,     1,     8,     2,    18,    19 ]
+    12,     3,    17,     8,     1,    19,     2,    20 ]
 
 racc_goto_check = [
-     5,     3,     1,     3,     2,     5,     5 ]
+     5,     3,     5,     3,     1,     5,     2,     5 ]
 
 racc_goto_pointer = [
-   nil,     2,     4,     1,   nil,   -11,   nil ]
+   nil,     4,     6,     1,   nil,   -11,   nil ]
 
 racc_goto_default = [
    nil,   nil,   nil,   nil,     4,   nil,    13 ]
@@ -58,13 +58,14 @@ racc_reduce_table = [
   1, 12, :_reduce_none,
   1, 12, :_reduce_none,
   3, 13, :_reduce_7,
+  2, 13, :_reduce_8,
   1, 13, :_reduce_none,
-  4, 14, :_reduce_9,
-  1, 14, :_reduce_10 ]
+  4, 14, :_reduce_10,
+  1, 14, :_reduce_11 ]
 
-racc_reduce_n = 11
+racc_reduce_n = 12
 
-racc_shift_n = 21
+racc_shift_n = 22
 
 racc_token_table = {
   false => 0,
@@ -153,17 +154,24 @@ module_eval(<<'.,.,', 'parser.racc', 18)
   end
 .,.,
 
-# reduce 8 omitted
-
-module_eval(<<'.,.,', 'parser.racc', 22)
-  def _reduce_9(val, _values, result)
-     result = Node::Field.new(name: val[0], selections: val[2]) 
+module_eval(<<'.,.,', 'parser.racc', 19)
+  def _reduce_8(val, _values, result)
+     result = Array(val[0]) + Array(val[1]) 
     result
   end
 .,.,
 
+# reduce 9 omitted
+
 module_eval(<<'.,.,', 'parser.racc', 23)
   def _reduce_10(val, _values, result)
+     result = Node::Field.new(name: val[0], selections: Array(val[2])) 
+    result
+  end
+.,.,
+
+module_eval(<<'.,.,', 'parser.racc', 24)
+  def _reduce_11(val, _values, result)
      result = Node::Field.new(name: val[0]) 
     result
   end

@@ -17,10 +17,11 @@ rule
 
   field_list
     : field comma field_list { result = Array(val[0]) + Array(val[2]) }
+    | field field_list { result = Array(val[0]) + Array(val[1]) }
     | field
 
   field
-    : name left_bracket field_list right_bracket { result = Node::Field.new(name: val[0], selections: val[2]) }
+    : name left_bracket field_list right_bracket { result = Node::Field.new(name: val[0], selections: Array(val[2])) }
     | name { result = Node::Field.new(name: val[0]) }
 
 ---- header ----
