@@ -27,7 +27,7 @@ class PlotterSpec < Minitest::Spec
       Plotter::Node::Document.new(
         parts: [
           Plotter::Node::OperationDefinition.new(
-            operation_type: :query,
+            operation_type: 'query',
             name: 'myQueryName',
             selections: [
               Plotter::Node::Field.new(
@@ -51,7 +51,31 @@ class PlotterSpec < Minitest::Spec
     assert_equal expected, result
   end
 
-  it "should handle the common schema introspection query"
+  it "should handle the common schema introspection query" do
+    result =
+      parse <<-GRAPHQL.freeze
+        query IntrospectionQuery {
+          __schema {
+            queryType { name }
+            mutationType { name }
+            subscriptionType { name }
+            types {
+              ...FullType
+            }
+            directives {
+              name
+              description
+              args {
+                ...InputValue
+              }
+              onOperation
+              onFragment
+              onField
+            }
+          }
+        }
+      GRAPHQL
+  end
 
   it "should ignore comments"
 end

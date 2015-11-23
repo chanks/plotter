@@ -60,12 +60,6 @@ class Plotter::Parser < Racc::Parser
       when (text = @ss.scan(/\s+/i))
         ;
 
-      when (text = @ss.scan(/query/i))
-         action { [:QUERY, :query] }
-
-      when (text = @ss.scan(/mutation/i))
-         action { [:MUTATION, :mutation] }
-
       when (text = @ss.scan(/\{/i))
          action { [:left_bracket, text] }
 
@@ -74,6 +68,9 @@ class Plotter::Parser < Racc::Parser
 
       when (text = @ss.scan(/,/i))
          action { [:comma, text] }
+
+      when (text = @ss.scan(/\.\.\.\w+/i))
+         action { [:fragment_name, text[3..-1]] }
 
       when (text = @ss.scan(/\w+/i))
          action { [:name, text] }

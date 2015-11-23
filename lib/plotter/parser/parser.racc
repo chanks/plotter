@@ -11,9 +11,9 @@ rule
   operation
     : operation_type name left_bracket field_list right_bracket { result = Node::OperationDefinition.new(operation_type: val[0], name: val[1], selections: Array(val[3])) }
 
+  # TODO: Figure out how to restrict what values this can be:
   operation_type
-    : QUERY
-    | MUTATION
+    : name
 
   field_list
     : field comma field_list { result = Array(val[0]) + Array(val[2]) }
@@ -22,6 +22,7 @@ rule
 
   field
     : name left_bracket field_list right_bracket { result = Node::Field.new(name: val[0], selections: Array(val[2])) }
+    | fragment_name { result = Node::FragmentSpread.new(name: val[0]) }
     | name { result = Node::Field.new(name: val[0]) }
 
 ---- header ----
