@@ -107,11 +107,11 @@ Racc_token_to_s_table = [
   "comma",
   "$start",
   "document",
-  "document_part_list",
-  "document_part",
-  "action_type",
-  "selection_list",
-  "selection" ]
+  "operation_list",
+  "operation",
+  "operation_type",
+  "field_list",
+  "field" ]
 
 Racc_debug_parser = false
 

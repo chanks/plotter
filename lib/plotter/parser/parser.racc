@@ -2,25 +2,25 @@ class Plotter::Parser
 
 rule
   document
-    : document_part_list { result = Node::Document.new(parts: Array(val[0])) }
+    : operation_list { result = Node::Document.new(parts: Array(val[0])) }
 
-  document_part_list
-    : document_part_list document_part { result = Array(val[0]) + Array(val[1]) }
-    | document_part
+  operation_list
+    : operation_list operation { result = Array(val[0]) + Array(val[1]) }
+    | operation
 
-  document_part
-    : action_type name left_bracket selection_list right_bracket { result = Node::OperationDefinition.new(operation_type: val[0], name: val[1], selections: Array(val[3])) }
+  operation
+    : operation_type name left_bracket field_list right_bracket { result = Node::OperationDefinition.new(operation_type: val[0], name: val[1], selections: Array(val[3])) }
 
-  action_type
+  operation_type
     : QUERY
     | MUTATION
 
-  selection_list
-    : selection comma selection_list { result = Array(val[0]) + Array(val[2]) }
-    | selection
+  field_list
+    : field comma field_list { result = Array(val[0]) + Array(val[2]) }
+    | field
 
-  selection
-    : name left_bracket selection_list right_bracket { result = Node::Field.new(name: val[0], selections: val[2]) }
+  field
+    : name left_bracket field_list right_bracket { result = Node::Field.new(name: val[0], selections: val[2]) }
     | name { result = Node::Field.new(name: val[0]) }
 
 ---- header ----
